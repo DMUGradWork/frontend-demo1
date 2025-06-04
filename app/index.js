@@ -1,10 +1,37 @@
-import { StyleSheet, Text, View } from "react-native";
+import { View, Text, Button, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router';
 
-export default function Page() {
+export default function HomeScreen() {
+  const router = useRouter();
+
   return (
     <View style={styles.container}>
-      <View style={styles.main}>
-        <Text style={styles.title}>동미대 테스트</Text>
+      <Text style={styles.title}>홈 화면</Text>
+      <View style={styles.buttonContainer}>
+        <Button
+          title="로그인"
+          onPress={() => router.push('/auth/login')}
+        />
+        <Button
+          title="회원가입"
+          onPress={() => router.push('/auth/signup')}
+        />
+        <Button
+          title="아이디 찾기"
+          onPress={() => router.push('/auth/find-id')}
+        />
+        <Button
+          title="디테일 페이지로 이동"
+          onPress={() => router.push('/view/detail')}
+        />
+        <Button
+          title="데이팅 목록"
+          onPress={() => router.push('/screens/EventListScreenCopy')}
+        />
+        <Button
+          title="캘린더 보기"
+          onPress={() => router.push('/screens/CalendarScreen')}
+        />
       </View>
     </View>
   );
@@ -13,21 +40,18 @@ export default function Page() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    padding: 24,
-  },
-  main: {
-    flex: 1,
-    justifyContent: "center",
-    maxWidth: 960,
-    marginHorizontal: "auto",
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
   },
   title: {
-    fontSize: 64,
-    fontWeight: "bold",
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 30,
   },
-  subtitle: {
-    fontSize: 36,
-    color: "#38434D",
+  buttonContainer: {
+    gap: 15,
   },
 });
+
+
