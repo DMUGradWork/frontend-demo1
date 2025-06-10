@@ -7,9 +7,11 @@ import {
   TouchableOpacity,
   SafeAreaView,
   ScrollView,
+  Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import Animated from 'react-native';
 
 const CalendarScreen = () => {
   const router = useRouter();
@@ -148,29 +150,31 @@ const CalendarScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#2c3e50" />
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#34495e' }}>
+      <StatusBar 
+        barStyle="dark-content"
+        backgroundColor="transparent" 
+        translucent={false}
+      />
       
-      {/* 헤더 */}
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="chevron-back" size={24} color="#fff" />
-          <Text style={styles.backText}>Back</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={styles.searchButton}>
-          <Ionicons name="search" size={24} color="#fff" />
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={styles.addButton}>
-          <Ionicons name="add" size={28} color="#fff" />
-        </TouchableOpacity>
-      </View>
+      {/* 플로팅 뒤로가기 버튼 */}
+      <TouchableOpacity 
+        style={styles.floatingBackButton}
+        onPress={() => router.back()}
+      >
+        <Ionicons name="chevron-back" size={24} color="#333" />
+      </TouchableOpacity>
 
-      <ScrollView style={styles.content}>
+      <Animated.ScrollView 
+        style={styles.scrollView} 
+        showsVerticalScrollIndicator={false}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          { useNativeDriver: false }
+        )}
+        scrollEventThrottle={16}
+        contentContainerStyle={styles.scrollContent}
+      >
         {/* 요일 헤더 */}
         <View style={styles.weekHeader}>
           {weekDays.map((day, index) => (
@@ -208,7 +212,7 @@ const CalendarScreen = () => {
             </TouchableOpacity>
           ))}
         </View>
-      </ScrollView>
+      </Animated.ScrollView>
 
       {/* 하단 탭바 */}
       <View style={styles.tabBar}>
@@ -229,6 +233,17 @@ const CalendarScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  floatingBackButton: {
+    position: 'absolute',
+    top: Platform.OS === 'ios' ? 60 : 20,
+    left: 20,
+    width: 44,
+    height: 44,
+  },
+  scrollContent: {
+    paddingBottom: 100,
+    paddingTop: Platform.OS === 'ios' ? 0 : 0,
+  },
   container: {
     flex: 1,
     backgroundColor: '#34495e',
